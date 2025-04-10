@@ -31,11 +31,6 @@ El despliegue se ha realizado siguiendo buenas prácticas de seguridad, escalabi
 - **Apache2**: Servidor web.
 - **HTML/CSS**: Interfaz básica.
 
-## 🚀 Despliegue
-
-Clonar este repositorio:
-- git clone https://github.com/GarekFronceda/FRONTECH.git
-
 ## 🚀 Desarrollo PHP
 
 La aplicación PHP está compuesta por varios archivos organizados de forma sencilla, con conexión a base de datos MySQL (RDS) y estructura modular. A continuación, se explican los componentes clave:
@@ -68,9 +63,7 @@ administrar_usuarios.php: Alta, baja y modificación de usuarios del sistema.
 
 administrar_clientes.php: Gestión de clientes registrados.
 
-administrar_incidentes.php: Visualización y modificación de incidencias del sistema.
-
-asignar_incidencia.php: Permite a los administradores asignar incidencias a técnicos.
+administrar_incidencias.php: Visualización y modificación de incidencias del sistema.
 
 📁 Vistas
 
@@ -86,3 +79,7 @@ asignar_incidencia.php: Permite a los administradores asignar incidencias a téc
 
 ![image](https://github.com/user-attachments/assets/5d2c8149-dce3-4a6a-b5c9-f268cf0c8a3c)
 
+## 🚀 Despliegue
+
+Clonar este repositorio:
+- git clone https://github.com/GarekFronceda/FRONTECH.git
