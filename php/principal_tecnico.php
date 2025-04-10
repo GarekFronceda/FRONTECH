@@ -1,20 +1,21 @@
 <?php
-include_once '../bbdd/connect.php';
-session_start();
+include_once '../bbdd/connect.php'; // Incluye el archivo de conexión a la base de datos
+session_start(); // Inicia la sesión para mantener el estado del usuario
 
-// Verificación mejorada
+// Verificación mejorada del rol y la sesión
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'Tecnico') {
-    $_SESSION['error'] = "Acceso no autorizado";
-    
-    // Redirige a donde corresponda según la URL de origen
-    $referer = $_SERVER['HTTP_REFERER'] ?? 'login.php';
+    $_SESSION['error'] = "Acceso no autorizado"; // Si no está autenticado o el rol no es 'Tecnico', redirige
+
+    // Redirige al usuario al lugar donde vino antes (o login si no tiene un origen válido)
+    $referer = $_SERVER['HTTP_REFERER'] ?? 'login.php'; 
     header("Location: $referer");
-    exit();
+    exit(); // Termina el script para evitar que se siga ejecutando
 }
-// Obtener todas las incidencias disponibles para técnicos
-$pdo = conectarConBaseDeDatos();
-$incidencias = obtenerIncidenciasDisponibles($pdo);
-$misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
+
+// Obtener todas las incidencias disponibles y las asignadas al técnico
+$pdo = conectarConBaseDeDatos(); // Establece la conexión con la base de datos
+$incidencias = obtenerIncidenciasDisponibles($pdo); // Obtiene todas las incidencias disponibles
+$misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']); // Obtiene las incidencias asignadas al técnico
 ?>
 
 <!DOCTYPE html>
@@ -23,40 +24,39 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
     <title>Panel Técnico</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/estilo_pagprincipal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/estilo_pagprincipal.css"> <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Iconos de Font Awesome -->
     <style>
+        /* Estilos para el diseño del panel técnico */
         .dashboard-tecnico {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: grid; /* Uso de Grid Layout para distribuir los elementos */
+            grid-template-columns: 1fr 1fr; /* Dos columnas */
             gap: 20px;
             margin: 30px auto;
             max-width: 1200px;
         }
         .incidencias-section {
-            background: white;
-            border-radius: 10px;
+            background: white; /* Fondo blanco para las secciones */
+            border-radius: 10px; /* Bordes redondeados */
             padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra sutil */
         }
         .incidencia-item {
             padding: 15px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #eee; /* Línea divisoria */
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .incidencia-item:last-child {
-            border-bottom: none;
-        }
         .btn-asignar {
-            background: #5c67f2;
+            background: #5c67f2; /* Color de fondo del botón */
             color: white;
             border: none;
             padding: 5px 10px;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: pointer; /* Muestra que es interactivo */
         }
+        /* Estilos para los badges de estado de la incidencia */
         .estado-badge {
             padding: 3px 8px;
             border-radius: 10px;
@@ -65,64 +65,20 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
         .pendiente { background: #ffc107; color: #000; }
         .en-proceso { background: #17a2b8; color: #fff; }
         .reparado { background: #28a745; color: #fff; }
-
-        .admin-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 30px auto;
-            max-width: 1200px;
-        }
-        .admin-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-        .admin-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        .admin-card i {
-            font-size: 2.5rem;
-            color: #5c67f2;
-            margin-bottom: 15px;
-        }
-        .admin-card h3 {
-            color: #5c67f2;
-            margin-bottom: 15px;
-        }
-        .quick-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-        .stat-box {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            min-width: 150px;
-            margin: 10px;
-        }
-
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <img src="../images/logo_frontech.png" width="20%">
-            <h4>¡Hola, <?php echo htmlspecialchars($_SESSION['usuario']); ?>!</h4>
+            <img src="../images/logo_frontech.png" width="20%"> <!-- Logo de la empresa -->
+            <h4>¡Hola, <?php echo htmlspecialchars($_SESSION['usuario']); ?>!</h4> <!-- Nombre del usuario -->
         </header>
 
         <h3>Panel Técnico</h3>
 
         <!-- Estadísticas rápidas -->
         <div class="quick-stats">
+            <!-- Estadísticas de clientes, incidencias y incidencias activas -->
             <div class="stat-box">
                 <h4>Clientes</h4>
                 <p><?php echo obtenerCantidadClientes($pdo); ?></p>
@@ -138,6 +94,7 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
         </div>
 
         <div class="dashboard-tecnico">
+            <!-- Sección de incidencias asignadas al técnico -->
             <div class="incidencias-section">
                 <h4><i class="fas fa-tasks"></i> Mis Incidencias</h4>
                 <?php if (empty($misIncidencias)): ?>
@@ -158,6 +115,7 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
                 <?php endif; ?>
             </div>
 
+            <!-- Sección de incidencias disponibles para asignar -->
             <div class="incidencias-section">
                 <h4><i class="fas fa-list"></i> Incidencias Disponibles</h4>
                 <?php if (empty($incidencias)): ?>
@@ -170,6 +128,7 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
                                 <small>(<?php echo htmlspecialchars($incidencia['marca']); ?>)</small><br>
                                 <span><?php echo htmlspecialchars($incidencia['descripcion_problema']); ?></span>
                             </div>
+                            <!-- Botón para asignarse a la incidencia -->
                             <button class="btn-asignar" onclick="asignarIncidencia(<?php echo $incidencia['id_reparacion']; ?>)">
                                 Asignar
                             </button>
@@ -178,10 +137,10 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
                 <?php endif; ?>
             </div>
         </div>
-        
-        <!-- Menú de administración -->
+
+        <!-- Menú de administración para otros técnicos (si aplica) -->
         <div class="admin-dashboard">
-            
+            <!-- Enlaces a páginas para administrar clientes e incidencias -->
             <a href="administrar_clientes.php" class="admin-card">
                 <i class="fas fa-address-book"></i>
                 <h3>Administrar Clientes</h3>
@@ -193,16 +152,17 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
                 <h3>Administrar Incidencias</h3>
                 <p>Supervisa y gestiona todas las incidencias</p>
             </a>
-            
         </div>
 
+        <!-- Formulario para cerrar sesión -->
         <form action='logoff.php' method='post'>
             <input type='submit' name='desconectar' class="btn" value='Cerrar sesión' />
         </form>
-        
+
         <p class="mt-3 text-muted">&copy; Frontech 2025</p>
     </div>
 
+    <!-- Script para asignar una incidencia -->
     <script>
     function asignarIncidencia(idReparacion) {
         if (confirm('¿Deseas asignarte esta incidencia?')) {
@@ -217,9 +177,9 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
             .then(data => {
                 if (data.success) {
                     alert('Incidencia asignada con éxito');
-                    location.reload();
+                    location.reload(); // Recarga la página para ver la actualización
                 } else {
-                    alert('Error: ' + data.message);
+                    alert('Error: ' + data.message); // Muestra el error si ocurre
                 }
             });
         }

@@ -209,24 +209,29 @@ tr:hover {
 <body>
     <div class="container">
         
+        <!-- Título de la página -->
         <h2><i class="fas fa-users-cog"></i> Administrar Usuarios</h2>
         
+        <!-- Mostrar mensaje de éxito o error, si existe -->
         <?php if ($mensaje): ?>
             <div class="alert <?= strpos($mensaje, 'Error') !== false ? 'alert-danger' : 'alert-success' ?>">
                 <?= $mensaje ?>
             </div>
         <?php endif; ?>
 
-        <!-- Formulario para añadir/editar usuario -->
+        <!-- Formulario para añadir o editar un usuario -->
         <form method="POST" action="administrar_usuarios.php">
+            <!-- Campo oculto para identificar el usuario a editar (si existe) -->
             <input type="hidden" name="id_usuario" value="<?= $usuario_editar['id_usuario'] ?? '' ?>">
             
+            <!-- Campo para el nombre de usuario -->
             <div class="form-group">
                 <label for="nombre_usuario">Nombre de usuario:</label>
                 <input type="text" id="nombre_usuario" name="nombre_usuario" 
                        value="<?= htmlspecialchars($usuario_editar['nombre_usuario'] ?? '') ?>" required>
             </div>
             
+            <!-- Campo para la contraseña -->
             <div class="form-group">
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" name="password" 
@@ -234,19 +239,23 @@ tr:hover {
                        <?= !isset($usuario_editar) ? 'required' : '' ?>>
             </div>
             
+            <!-- Campo para seleccionar el rol del usuario -->
             <div class="form-group">
                 <label for="rol">Rol:</label>
                 <select id="rol" name="rol" required>
+                    <!-- Opciones de rol (Admin, Técnico, Cliente) -->
                     <option value="Admin" <?= isset($usuario_editar) && $usuario_editar['rol'] == 'Admin' ? 'selected' : '' ?>>Administrador</option>
                     <option value="Tecnico" <?= isset($usuario_editar) && $usuario_editar['rol'] == 'Tecnico' ? 'selected' : '' ?>>Técnico</option>
                     <option value="Cliente" <?= isset($usuario_editar) && $usuario_editar['rol'] == 'Cliente' ? 'selected' : '' ?>>Cliente</option>
                 </select>
             </div>
 
+            <!-- Campo para seleccionar el cliente asociado, solo visible si el rol es 'Cliente' -->
             <div class="form-group" id="cliente-group" style="<?= (isset($usuario_editar) && $usuario_editar['rol'] == 'Cliente') || !isset($usuario_editar) ? '' : 'display: none;' ?>">
                 <label for="id_cliente">Cliente asociado:</label>
                 <select id="id_cliente" name="id_cliente">
                     <option value="">Seleccionar cliente...</option>
+                    <!-- Mostrar opciones de clientes -->
                     <?php foreach ($clientes as $cliente): ?>
                         <option value="<?= $cliente['id_cliente'] ?>" 
                             <?= (isset($usuario_editar) && $usuario_editar['id_cliente'] == $cliente['id_cliente']) ? 'selected' : '' ?>>
@@ -256,18 +265,21 @@ tr:hover {
                 </select>
             </div>
             
+            <!-- Botón para guardar los cambios o añadir un nuevo usuario -->
             <button type="submit">
                 <i class="fas fa-save"></i> <?= isset($usuario_editar) ? 'Actualizar Usuario' : 'Añadir Usuario' ?>
             </button>
             
+            <!-- Botón de cancelar si se está editando un usuario -->
             <?php if (isset($usuario_editar)): ?>
                 <a href="administrar_usuarios.php" class="btn-cancelar">
                     <i class="fas fa-times"></i> Cancelar
                 </a>
             <?php endif; ?>
         </form>
-<br>
-        <!-- Tabla de usuarios -->
+        <br>
+        
+        <!-- Tabla que muestra la lista de usuarios -->
         <h3>Lista de Usuarios</h3>
         <table>
             <thead>
@@ -280,6 +292,7 @@ tr:hover {
                 </tr>
             </thead>
             <tbody>
+                <!-- Iterar a través de los usuarios y mostrar en la tabla -->
                 <?php foreach ($usuarios as $usuario): ?>
                     <tr>
                         <td><?= $usuario['id_usuario'] ?></td>
@@ -287,10 +300,12 @@ tr:hover {
                         <td><?= htmlspecialchars($usuario['rol']) ?></td>
                         <td><?= htmlspecialchars($usuario['nombre_cliente'] ?? 'N/A') ?></td>
                         <td class="actions">
+                            <!-- Enlace para editar el usuario -->
                             <a href="administrar_usuarios.php?editar=<?= $usuario['id_usuario'] ?>">
                                 <i class="fas fa-edit"></i> Editar
                             </a>
                             <br>
+                            <!-- Enlace para eliminar el usuario -->
                             <a href="administrar_usuarios.php?eliminar=<?= $usuario['id_usuario'] ?>" 
                                onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
                                 <i class="fas fa-trash-alt"></i> Eliminar
@@ -301,6 +316,7 @@ tr:hover {
             </tbody>
         </table>
 
+        <!-- Botón para volver al panel de administración -->
         <div class="header-actions">
             <a href="principal_admin.php" class="btn-volver">
                 <i class="fas fa-arrow-left"></i> Volver al Panel
@@ -309,13 +325,14 @@ tr:hover {
 
     </div>
 
-
+    <!-- Script para mostrar/ocultar el campo de cliente según el rol seleccionado -->
     <script>
-        // Mostrar/ocultar campo de cliente según el rol seleccionado
         document.getElementById('rol').addEventListener('change', function() {
             const clienteGroup = document.getElementById('cliente-group');
+            // Mostrar el campo 'cliente' solo si el rol seleccionado es 'Cliente'
             clienteGroup.style.display = this.value === 'Cliente' ? 'block' : 'none';
         });
     </script>
 </body>
+
 </html>
