@@ -22,7 +22,7 @@
     </head>
     <body>
     
-        <h1>Bienvenido a PintaCuadri</h1>
+        <h1>Bienvenido a FRONTECH</h1>
         
     </body>
 </html>
