@@ -400,6 +400,18 @@ tr:hover {
             </div>
             
             <div class="form-group">
+                <label for="fecha_ingreso">Fecha de Ingreso:</label>
+                <input type="date" id="fecha_ingreso" name="fecha_ingreso" required 
+                       value="<?= isset($incidencia_editar) ? htmlspecialchars($incidencia_editar['fecha_ingreso']) : date('Y-m-d') ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="fecha_salida">Fecha de Salida:</label>
+                <input type="date" id="fecha_salida" name="fecha_salida" 
+                       value="<?= isset($incidencia_editar) && !empty($incidencia_editar['fecha_salida']) ? htmlspecialchars($incidencia_editar['fecha_salida']) : '' ?>">
+            </div>
+            
+            <div class="form-group">
                 <label for="descripcion_problema">Descripción del problema:</label>
                 <textarea id="descripcion_problema" name="descripcion_problema" rows="4" required><?= htmlspecialchars($incidencia_editar['descripcion_problema'] ?? '') ?></textarea>
             </div>
@@ -434,6 +446,7 @@ tr:hover {
                     <th>Cliente</th>
                     <th>Dispositivo</th>
                     <th>Fecha Ingreso</th>
+                    <th>Fecha Salida</th>
                     <th>Problema</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -446,6 +459,7 @@ tr:hover {
                         <td><?= htmlspecialchars($incidencia['cliente_nombre']) ?></td>
                         <td><?= htmlspecialchars("{$incidencia['tipo']} {$incidencia['marca']} {$incidencia['modelo']}") ?></td>
                         <td><?= htmlspecialchars($incidencia['fecha_ingreso']) ?></td>
+                        <td><?= !empty($incidencia['fecha_salida']) ? htmlspecialchars($incidencia['fecha_salida']) : 'N/A' ?></td>
                         <td><?= htmlspecialchars(substr($incidencia['descripcion_problema'], 0, 50)) ?>...</td>
                         <td>
                             <span class="estado-badge <?= str_replace(' ', '-', $incidencia['estado']) ?>">
