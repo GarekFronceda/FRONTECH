@@ -1,7 +1,3 @@
-<?php
-    header("Location: php/login.php");
-    exit(); // Asegura que el script se detiene aquí
-?>
 <html>
     <head>
         <title>Creación de tablas</title>
@@ -22,7 +18,12 @@
     </head>
     <body>
     
-        <h1>Bienvenido a FRONTECH</h1>
-        
+        <h1>Bienvenido a PintaCuadri</h1>
+       
+        <?php
+        header("Location: php/login.php");
+        exit(); // Asegura que el script se detiene aquí
+        ?>
+
     </body>
 </html>

@@ -62,7 +62,7 @@ img {
     color: #e0e0e0;
 }
 
-/* Botón de desconectarse */
+/* Botón de desconexión */
 .btn {
     padding: 10px 20px;
     font-size: 1rem;
@@ -100,7 +100,7 @@ h3 {
     margin-bottom: 15px;
 }
 
-/* Tablas */
+/* Tabla de asignaturas */
 table {
     width: 90%;
     max-width: 800px;
