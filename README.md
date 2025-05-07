@@ -71,15 +71,13 @@ administrar_incidencias.php: Visualización y modificación de incidencias del s
 
 ## 🌐 Esquema de la red
 
-![image](https://github.com/user-attachments/assets/c2d61185-6200-4591-bbe4-23cdab2f9ff8)
+![image](https://github.com/user-attachments/assets/bf7ef464-1b1c-41c8-b468-a6e152a93dc1)
 
 ## ⚡ Modelo entidad-relación
 
-![image](https://github.com/user-attachments/assets/377b341f-b292-4ffa-96be-97ffb633c682)
+![image](https://github.com/user-attachments/assets/9e3a6656-016b-406a-a52a-891d7437a95f)
 
-![image](https://github.com/user-attachments/assets/5d2c8149-dce3-4a6a-b5c9-f268cf0c8a3c)
+## ⚡ UML
 
-## 🚀 Despliegue
+![image](https://github.com/user-attachments/assets/3ef5d557-ed37-4840-b69e-bd17eb7a3107)
 
-Clonar este repositorio:
-- git clone https://github.com/GarekFronceda/FRONTECH.git
