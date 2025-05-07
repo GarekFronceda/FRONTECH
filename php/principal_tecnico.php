@@ -26,46 +26,6 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
     <link rel="stylesheet" href="../css/estilo_pagprincipal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .dashboard-tecnico {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 30px auto;
-            max-width: 1200px;
-        }
-        .incidencias-section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .incidencia-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .incidencia-item:last-child {
-            border-bottom: none;
-        }
-        .btn-asignar {
-            background: #5c67f2;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .estado-badge {
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-        .pendiente { background: #ffc107; color: #000; }
-        .en-proceso { background: #17a2b8; color: #fff; }
-        .reparado { background: #28a745; color: #fff; }
-
         .admin-dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -136,48 +96,6 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
                 <p><?php echo obtenerIncidenciasActivas($pdo); ?></p>
             </div>
         </div>
-
-        <div class="dashboard-tecnico">
-            <div class="incidencias-section">
-                <h4><i class="fas fa-tasks"></i> Mis Incidencias</h4>
-                <?php if (empty($misIncidencias)): ?>
-                    <p>No tienes incidencias asignadas</p>
-                <?php else: ?>
-                    <?php foreach ($misIncidencias as $incidencia): ?>
-                        <div class="incidencia-item">
-                            <div>
-                                <strong><?php echo htmlspecialchars($incidencia['tipo']); ?></strong>
-                                <small>(<?php echo htmlspecialchars($incidencia['marca']); ?>)</small><br>
-                                <span><?php echo htmlspecialchars($incidencia['descripcion_problema']); ?></span>
-                            </div>
-                            <span class="estado-badge <?php echo str_replace(' ', '-', strtolower($incidencia['estado'])); ?>">
-                                <?php echo htmlspecialchars($incidencia['estado']); ?>
-                            </span>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-
-            <div class="incidencias-section">
-                <h4><i class="fas fa-list"></i> Incidencias Disponibles</h4>
-                <?php if (empty($incidencias)): ?>
-                    <p>No hay incidencias disponibles</p>
-                <?php else: ?>
-                    <?php foreach ($incidencias as $incidencia): ?>
-                        <div class="incidencia-item">
-                            <div>
-                                <strong><?php echo htmlspecialchars($incidencia['tipo']); ?></strong>
-                                <small>(<?php echo htmlspecialchars($incidencia['marca']); ?>)</small><br>
-                                <span><?php echo htmlspecialchars($incidencia['descripcion_problema']); ?></span>
-                            </div>
-                            <button class="btn-asignar" onclick="asignarIncidencia(<?php echo $incidencia['id_reparacion']; ?>)">
-                                Asignar
-                            </button>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
         
         <!-- Menú de administración -->
         <div class="admin-dashboard">
@@ -202,28 +120,5 @@ $misIncidencias = obtenerIncidenciasPorTecnico($pdo, $_SESSION['id_usuario']);
         
         <p class="mt-3 text-muted">&copy; Frontech 2025</p>
     </div>
-
-    <script>
-    function asignarIncidencia(idReparacion) {
-        if (confirm('¿Deseas asignarte esta incidencia?')) {
-            fetch('asignar_incidencia.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'id_reparacion=' + idReparacion
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Incidencia asignada con éxito');
-                    location.reload();
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            });
-        }
-    }
-    </script>
 </body>
 </html>

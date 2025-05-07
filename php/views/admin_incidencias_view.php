@@ -413,7 +413,7 @@ tr:hover {
             
             <div class="form-group">
                 <label for="descripcion_problema">Descripción del problema:</label>
-                <textarea id="descripcion_problema" name="descripcion_problema" rows="4" required><?= htmlspecialchars($incidencia_editar['descripcion_problema'] ?? '') ?></textarea>
+                <textarea id="descripcion_problema" name="descripcion_problema" rows="4" required placeholder="(Indique el técnico encargado de la reparación. Ejemplo: Reparación asignada a Ángel)"><?= htmlspecialchars($incidencia_editar['descripcion_problema'] ?? '') ?></textarea>
             </div>
             
             <div class="form-group">
